@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thai Consonants - Mnemonic Match</title>
+    <title>Thai Sara - Mnemonic Match</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -15,8 +15,7 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            position: relative;
-            padding: 20px;
+            padding: 15px;
             box-sizing: border-box;
         }
         #game-container {
@@ -27,7 +26,6 @@
             text-align: center;
             max-width: 700px;
             width: 100%;
-            z-index: 10;
             box-sizing: border-box;
         }
         h1 {
@@ -52,7 +50,6 @@
             align-items: center;
             justify-content: center;
             border-left: 5px solid #3498db;
-            box-sizing: border-box;
         }
         .meaning-text {
             font-size: 1.5rem;
@@ -63,6 +60,12 @@
         .hint-text {
             color: #34495e;
             font-style: italic;
+            line-height: 1.4;
+        }
+        /* Style for emphasized hint words */
+        .hint-highlight {
+            color: red;
+            font-weight: bold;
         }
         #options {
             display: grid;
@@ -74,13 +77,13 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 1rem;
+            /* Added extra vertical padding to prevent top/bottom vowels from clipping */
+            padding: 2rem 1rem; 
             border: 2px solid #bdc3c7;
             background-color: white;
             border-radius: 10px;
             cursor: pointer;
             transition: all 0.2s;
-            box-sizing: border-box;
         }
         button.option-btn:hover {
             background-color: #e8f4fd;
@@ -88,30 +91,25 @@
             transform: scale(1.02);
         }
         .thai-char {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-family: 'Sarabun', sans-serif;
             color: #2c3e50;
-        }
-        .thai-name {
-            font-size: 1.1rem;
-            color: #7f8c8d;
-            margin-top: 0.5rem;
-            font-weight: bold;
+            /* Changed from line-height: 1 to normal so floating vowels aren't crushed on Android */
+            line-height: normal; 
+            padding: 10px 0;
         }
         button.option-btn.correct {
             background-color: #2ecc71;
             border-color: #27ae60;
         }
-        button.option-btn.correct .thai-char, 
-        button.option-btn.correct .thai-name {
+        button.option-btn.correct .thai-char {
             color: white;
         }
         button.option-btn.wrong {
             background-color: #e74c3c;
             border-color: #c0392b;
         }
-        button.option-btn.wrong .thai-char, 
-        button.option-btn.wrong .thai-name {
+        button.option-btn.wrong .thai-char {
             color: white;
         }
         #feedback {
@@ -135,81 +133,8 @@
             background-color: #2980b9;
         }
 
-        /* --- Enriched & Enlarged Sara Table Widget Styles --- */
-        .sara-table-widget {
-            position: fixed;
-            top: 25px;
-            right: 25px;
-            background-color: rgba(255, 255, 255, 0.98);
-            border-radius: 12px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
-            padding: 20px;
-            z-index: 1000;
-            border: 2px solid #3498db;
-            box-sizing: border-box;
-        }
-        .sara-table-widget h3 {
-            margin: 0 0 15px 0;
-            font-size: 1.5rem;
-            color: #2c3e50;
-            text-align: center;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-        }
-        .sara-table {
-            border-collapse: collapse;
-            width: 240px; 
-            font-size: 1.2rem; 
-        }
-        .sara-table th, .sara-table td {
-            border: 1px solid #ecf0f1;
-            padding: 12px 15px; 
-            text-align: center;
-        }
-        .sara-table th {
-            background-color: #f9fbfd;
-            color: #7f8c8d;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .sara-table .thai-sara {
-            font-family: 'Sarabun', sans-serif;
-            font-weight: bold;
-            font-size: 2.2rem; 
-            color: #e67e22;
-        }
-
-        /* --- Tablet Responsiveness --- */
-        @media (max-width: 1250px) {
-            .sara-table-widget {
-                position: absolute;
-                transform: scale(0.85);
-                transform-origin: top right;
-            }
-        }
-        @media (max-width: 950px) {
-            body {
-                justify-content: flex-start;
-            }
-            .sara-table-widget {
-                position: relative;
-                top: 0;
-                right: 0;
-                margin-bottom: 20px;
-                transform: none;
-                width: 100%;
-                max-width: 400px;
-            }
-            .sara-table {
-                width: 100%;
-            }
-        }
-
         /* --- Mobile Responsiveness --- */
         @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
             #game-container {
                 padding: 1.5rem 1rem;
             }
@@ -235,58 +160,23 @@
                 gap: 10px;
             }
             button.option-btn {
-                padding: 1rem 0.5rem;
+                padding: 1.5rem 0.5rem; /* Ensure padding remains generous on mobile */
             }
             .thai-char {
-                font-size: 3rem; /* Scaled down for smaller screens */
-            }
-            .thai-name {
-                font-size: 0.95rem;
+                font-size: 3.8rem; /* Scaled UP slightly from previous mobile version for readability */
             }
             #feedback {
                 font-size: 1.1rem;
                 margin-top: 1rem;
-            }
-            .sara-table-widget {
-                padding: 15px;
-            }
-            .sara-table-widget h3 {
-                font-size: 1.2rem;
-                margin-bottom: 10px;
-            }
-            .sara-table {
-                font-size: 1rem;
-            }
-            .sara-table th, .sara-table td {
-                padding: 8px 10px;
-            }
-            .sara-table .thai-sara {
-                font-size: 1.8rem; 
             }
         }
     </style>
 </head>
 <body>
 
-<div class="sara-table-widget">
-    <h3>Sara SET 1</h3>
-    <table class="sara-table">
-        <tr>
-            <th>Sara</th>
-            <th>Pronounce</th>
-        </tr>
-        <tr><td class="thai-sara">-า</td><td>-aa</td></tr>
-        <tr><td class="thai-sara">-ี</td><td>-ee</td></tr>
-        <tr><td class="thai-sara">-ู</td><td>-uu</td></tr>
-        <tr><td class="thai-sara">โ-</td><td>-oh</td></tr>
-        <tr><td class="thai-sara">ไ-</td><td>-ai</td></tr>
-        <tr><td class="thai-sara">ใ-</td><td>-ai</td></tr>
-    </table>
-</div>
-
 <div id="game-container">
-    <h1>Consonant Match</h1>
-    <div id="progress">Score: <span id="score">0</span> / 26</div>
+    <h1>Sara Match</h1>
+    <div id="progress">Score: <span id="score">0</span> / 6</div>
     
     <div id="hint-box">
         <div class="meaning-text" id="meaning-display"></div>
@@ -296,19 +186,15 @@
     <div id="options">
         <button class="option-btn" onclick="checkAnswer(0)">
             <span class="thai-char" id="char-0"></span>
-            <span class="thai-name" id="name-0"></span>
         </button>
         <button class="option-btn" onclick="checkAnswer(1)">
             <span class="thai-char" id="char-1"></span>
-            <span class="thai-name" id="name-1"></span>
         </button>
         <button class="option-btn" onclick="checkAnswer(2)">
             <span class="thai-char" id="char-2"></span>
-            <span class="thai-name" id="name-2"></span>
         </button>
         <button class="option-btn" onclick="checkAnswer(3)">
             <span class="thai-char" id="char-3"></span>
-            <span class="thai-name" id="name-3"></span>
         </button>
     </div>
 
@@ -317,34 +203,14 @@
 </div>
 
 <script>
-    // 26 unique consonants loaded from your provided CSV data
-    const allConsonants = [
-        { char: 'ก', name: 'Gor Gài', meaning: 'Chicken', hint: 'looks like a chicken beak.' },
-        { char: 'ข', name: 'Kŏr Kài', meaning: 'Egg', hint: 'represents an egg. But instead it looks like a Condom! (Con sounds like Kŏr, doesn\'t it?)' },
-        { char: 'ค', name: 'Kor Kwaay', meaning: 'Buffalo', hint: 'looks like a buffalo butt. The buffalo loves being outside.' },
-        { char: 'ง', name: 'Ngor Nguu', meaning: 'Snake', hint: 'looks like a snake raising his neck.' },
-        { char: 'จ', name: 'Jor Jaan', meaning: 'Dish', hint: 'looks like a hand of a waitress holding a plate' },
-        { char: 'ช', name: 'Chor Cháang', meaning: 'Elephant', hint: 'Think of a magical elephant hatching from an egg.' },
-        { char: 'ซ', name: 'Sor Sôh', meaning: 'Chain', hint: 'A magical elephant was captured and chained.' },
-        { char: 'ด', name: 'Dor Dèk', meaning: 'Kid', hint: 'Unlike a buffalo who loves being outdoors in the sun, a kit loves being in the house (look at his head tugging inside!).' },
-        { char: 'ต', name: 'DTor DTào', meaning: 'Turtle', hint: 'Like a kid, a turtle with a bumpy top loves hiding his head inside his shell.' },
-        { char: 'อ', name: 'or aàng', meaning: 'Sink', hint: 'The shape of this consonant looks like a sing with a faucet on top.' },
-        { char: 'บ', name: 'Bor Bai-Mái', meaning: 'Leaf', hint: 'The leaf has a wider base than an egg.' },
-        { char: 'ม', name: 'Mor Máa', meaning: 'Horse', hint: 'This consonant looks like a leaf, think of a race between a horse and a mouse. A horse is faster so let\'s draw a leg in front.' },
-        { char: 'น', name: 'Nor Nŭu', meaning: 'Mouse', hint: 'This consonant looks like a leaf, think of a race between a horse and a mouse. A mouse is slower so let\'s draw a tail at the rear.' },
-        { char: 'ป', name: 'BPor BPlaa', meaning: 'Fish', hint: 'Draw a rear long fin at the end of the leaf turning it into a fish.' },
-        { char: 'พ', name: 'Por Paan', meaning: 'Offering Tray', hint: 'Fold the base of the leaf to turn it into an offering tray.' },
-        { char: 'ย', name: 'Yor Yák', meaning: 'Giant', hint: 'A leaf can also turn into the face of a giant, move the head inside to make it look like a giant\'s big eye then draw a smile.' },
-        { char: 'ท', name: 'Tor Tá-Hăan', meaning: 'Soldier', hint: 'The soldier consonant looks like a soldier crawling.' },
-        { char: 'ห', name: 'Hŏr Hèeb', meaning: 'Chest', hint: 'The chest consonant looks like a soldier carrying a chest on his back.' },
-        { char: 'ว', name: 'Wor Wăen', meaning: 'Ring', hint: 'The shape of this consonant looks like a ring on a finger.' },
-        { char: 'ร', name: 'Ror Ruuea', meaning: 'Boat', hint: 'Let\'s draw a small sail above the ring turning this into a boat.' },
-        { char: 'ล', name: 'Lor Ling', meaning: 'Monkey', hint: 'The monkey consonant looks like a monkey swinging on a vine in a tree.' },
-        { char: 'ส', name: 'Sŏr Sŭuea', meaning: 'Tiger', hint: 'Think of a monkey being chased by a tiger. The tiger swipes its claws down on the monkey\'s head. Turning the monkey consonant into a tiger consonant.' },
-        { char: 'ถ', name: 'Tŏr Tŭng', meaning: 'Bag', hint: 'Think of the chicken consonant, then imagine fried chicken in a bag tied with a rubber band at the bottom (head insdie). Turning the chicken consonant into the bag consonant.' },
-        { char: 'ฟ', name: 'For Fan', meaning: 'Tooth', hint: 'Think back to childhood — some parents would tie a string to a baby tooth and yank it out.' },
-        { char: 'ผ', name: 'Pŏr Pûeng', meaning: 'Bee', hint: 'Shaped like a tray but head inside, sound also like a tray but with a valley tone.' },
-        { char: 'ฝ', name: 'Fŏr Făa', meaning: 'Lid', hint: 'Shaped like a tooth but head inside, sound also like a tooth but with a valley tone.' }
+    // 6 unique vowels
+    const allVowels = [
+        { char: '-า', pronounce: '-aa', hint: `Think of a man with the <span class='hint-highlight'>walking stick</span> saying "<span class='hint-highlight'>AA!</span> My back!"` },
+        { char: '-ี', pronounce: '-ee', hint: `Think of an <span class='hint-highlight'>eagle</span> flying <span class='hint-highlight'>above</span> a consonant.` },
+        { char: '-ู', pronounce: '-uu', hint: `Think of a <span class='hint-highlight'>U-Boat</span> (submarine) <span class='hint-highlight'>under</span> a consonant.` },
+        { char: 'โ-', pronounce: '-oh', hint: `An <span class='hint-highlight'>OAK</span> tree spreads evenly to left and right. All tree vowels are always <span class='hint-highlight'>TALLER and IN FRONT OF</span> a consonant.` },
+        { char: 'ไ-', pronounce: '-ai (spiky)', hint: `A spiky <span class='hint-highlight'>IVY</span> leaf! All tree vowels are always <span class='hint-highlight'>TALLER and IN FRONT OF</span> a consonant.` },
+        { char: 'ใ-', pronounce: '-ai (curly)', hint: `A curly <span class='hint-highlight'>IVY</span> vines! All tree vowels are always <span class='hint-highlight'>TALLER and IN FRONT OF</span> a consonant.` }
     ];
 
     let score = 0;
@@ -365,7 +231,7 @@
 
     function initGame() {
         score = 0;
-        currentPool = shuffleArray(allConsonants);
+        currentPool = shuffleArray(allVowels);
         wrongPool = [];
         document.getElementById('score').innerText = score;
         loadNextQuestion();
@@ -386,8 +252,8 @@
             if (wrongPool.length === 0) {
                 document.getElementById('game-container').innerHTML = `
                     <h1>Game Complete!</h1>
-                    <h2 style="color: #27ae60;">Final Score: 26 / 26</h2>
-                    <p>All consonants mastered.</p>
+                    <h2 style="color: #27ae60;">Final Score: 6 / 6</h2>
+                    <p>All vowels mastered.</p>
                     <button id="next-btn" style="display:inline-block;" onclick="location.reload()">Play Again</button>
                 `;
                 return;
@@ -401,20 +267,19 @@
         currentQuestion = currentPool.pop();
         
         // Pick 3 random distractors from the FULL list
-        let distractors = allConsonants.filter(c => c.char !== currentQuestion.char);
+        let distractors = allVowels.filter(v => v.char !== currentQuestion.char);
         distractors = shuffleArray(distractors).slice(0, 3);
         
         // Combine and shuffle options
         currentOptions = shuffleArray([currentQuestion, ...distractors]);
-        correctIndex = currentOptions.findIndex(c => c.char === currentQuestion.char);
+        correctIndex = currentOptions.findIndex(v => v.char === currentQuestion.char);
 
         // Update UI Text
-        document.getElementById('meaning-display').innerText = `Find: "${currentQuestion.meaning}"`;
-        document.getElementById('hint-display').innerText = `Hint: ${currentQuestion.hint}`;
+        document.getElementById('meaning-display').innerText = `Find: ${currentQuestion.pronounce}`;
+        document.getElementById('hint-display').innerHTML = `Hint: ${currentQuestion.hint}`;
         
         currentOptions.forEach((opt, index) => {
             document.getElementById(`char-${index}`).innerText = opt.char;
-            document.getElementById(`name-${index}`).innerText = opt.name;
         });
     }
 
@@ -431,12 +296,12 @@
             feedback.innerText = "Correct! Great job."; 
             feedback.style.color = "#27ae60";
         } else {
-            wrongPool.push(currentQuestion); // Send to wrong pool to be repeated later
+            wrongPool.push(currentQuestion); 
             buttons[selectedIndex].classList.add('wrong');
             buttons[correctIndex].classList.add('correct');
             
             const correctAnswer = currentOptions[correctIndex];
-            feedback.innerText = `Incorrect. The correct answer is ${correctAnswer.char} (${correctAnswer.name}).`;
+            feedback.innerText = `Incorrect. The correct answer is ${correctAnswer.char} (${correctAnswer.pronounce}).`;
             feedback.style.color = "#c0392b";
         }
 
