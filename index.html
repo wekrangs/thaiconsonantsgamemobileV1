@@ -204,14 +204,21 @@
                 transform-origin: top right;
             }
         }
+        
+        /* --- Mobile / Small Screen Responsiveness (Changes Order) --- */
         @media (max-width: 950px) {
             body {
                 justify-content: flex-start;
+            }
+            #game-container {
+                order: 1; /* Forces the game to render on top */
             }
             .sara-table-widget {
                 position: relative;
                 top: 0;
                 right: 0;
+                order: 2; /* Forces the table to render below the game */
+                margin-top: 25px; /* Adds space between the game and the table */
                 margin-bottom: 20px;
                 transform: none;
                 width: 100%;
@@ -219,7 +226,7 @@
             }
         }
 
-        /* --- Mobile Responsiveness --- */
+        /* --- Extra Small Mobile Tweaks --- */
         @media (max-width: 600px) {
             body {
                 padding: 10px;
@@ -294,7 +301,6 @@
             <th>Sara</th>
             <th>Pronounce</th>
         </tr>
-        <!-- Replaced hyphens with อ (O Ang) for mobile compatibility -->
         <tr><td class="thai-sara">อา</td><td>-aa</td></tr>
         <tr><td class="thai-sara">อี</td><td>-ee</td></tr>
         <tr><td class="thai-sara">อู</td><td>-uu</td></tr>
@@ -302,7 +308,6 @@
         <tr><td class="thai-sara">ไอ</td><td>-ai</td></tr>
         <tr><td class="thai-sara">ใอ</td><td>-ai</td></tr>
     </table>
-    <!-- Remark Box explaining placeholder อ -->
     <div class="sara-remark">
         💡 <strong>Note:</strong> อ is where a consonant is placed, when you change a consonant then the sound will also change.
     </div>
