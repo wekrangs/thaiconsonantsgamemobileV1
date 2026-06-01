@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thai Consonants - Mnemonic Match</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #game-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 700px;
+            width: 100%;
+            z-index: 10;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        #progress {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 1.5rem;
+        }
+        #hint-box {
+            font-size: 1.2rem;
+            background-color: #ecf0f1;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-left: 5px solid #3498db;
+            box-sizing: border-box;
+        }
+        .meaning-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e67e22;
+            margin-bottom: 0.5rem;
+        }
+        .hint-text {
+            color: #34495e;
+            font-style: italic;
+        }
+        #options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        button.option-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            border: 2px solid #bdc3c7;
+            background-color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-sizing: border-box;
+        }
+        button.option-btn:hover {
+            background-color: #e8f4fd;
+            border-color: #3498db;
+            transform: scale(1.02);
+        }
+        .thai-char {
+            font-size: 4rem;
+            font-family: 'Sarabun', sans-serif;
+            color: #2c3e50;
+        }
+        .thai-name {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+            margin-top: 0.5rem;
+            font-weight: bold;
+        }
+        button.option-btn.correct {
+            background-color: #2ecc71;
+            border-color: #27ae60;
+        }
+        button.option-btn.correct .thai-char, 
+        button.option-btn.correct .thai-name {
+            color: white;
+        }
+        button.option-btn.wrong {
+            background-color: #e74c3c;
+            border-color: #c0392b;
+        }
+        button.option-btn.wrong .thai-char, 
+        button.option-btn.wrong .thai-name {
+            color: white;
+        }
+        #feedback {
+            margin-top: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            min-height: 30px;
+        }
+        #next-btn {
+            margin-top: 1rem;
+            padding: 0.8rem 2rem;
+            font-size: 1.1rem;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: none;
+        }
+        #next-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* --- Enriched & Enlarged Sara Table Widget Styles --- */
+        .sara-table-widget {
+            position: fixed;
+            top: 25px;
+            right: 25px;
+            background-color: rgba(255, 255, 255, 0.98);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+            padding: 20px;
+            z-index: 1000;
+            border: 2px solid #3498db;
+            box-sizing: border-box;
+        }
+        .sara-table-widget h3 {
+            margin: 0 0 15px 0;
+            font-size: 1.5rem;
+            color: #2c3e50;
+            text-align: center;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .sara-table {
+            border-collapse: collapse;
+            width: 240px; 
+            font-size: 1.2rem; 
+        }
+        .sara-table th, .sara-table td {
+            border: 1px solid #ecf0f1;
+            padding: 12px 15px; 
+            text-align: center;
+        }
+        .sara-table th {
+            background-color: #f9fbfd;
+            color: #7f8c8d;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        .sara-table .thai-sara {
+            font-family: 'Sarabun', sans-serif;
+            font-weight: bold;
+            font-size: 2.2rem; 
+            color: #e67e22;
+        }
+
+        /* --- Tablet Responsiveness --- */
+        @media (max-width: 1250px) {
+            .sara-table-widget {
+                position: absolute;
+                transform: scale(0.85);
+                transform-origin: top right;
+            }
+        }
+        @media (max-width: 950px) {
+            body {
+                justify-content: flex-start;
+            }
+            .sara-table-widget {
+                position: relative;
+                top: 0;
+                right: 0;
+                margin-bottom: 20px;
+                transform: none;
+                width: 100%;
+                max-width: 400px;
+            }
+            .sara-table {
+                width: 100%;
+            }
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            #game-container {
+                padding: 1.5rem 1rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            #progress {
+                font-size: 1rem;
+                margin-bottom: 1rem;
+            }
+            #hint-box {
+                padding: 1rem;
+                margin-bottom: 1.5rem;
+                min-height: 80px;
+            }
+            .meaning-text {
+                font-size: 1.2rem;
+            }
+            .hint-text {
+                font-size: 1rem;
+            }
+            #options {
+                gap: 10px;
+            }
+            button.option-btn {
+                padding: 1rem 0.5rem;
+            }
+            .thai-char {
+                font-size: 3rem; /* Scaled down for smaller screens */
+            }
+            .thai-name {
+                font-size: 0.95rem;
+            }
+            #feedback {
+                font-size: 1.1rem;
+                margin-top: 1rem;
+            }
+            .sara-table-widget {
+                padding: 15px;
+            }
+            .sara-table-widget h3 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            .sara-table {
+                font-size: 1rem;
+            }
+            .sara-table th, .sara-table td {
+                padding: 8px 10px;
+            }
+            .sara-table .thai-sara {
+                font-size: 1.8rem; 
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="sara-table-widget">
+    <h3>Sara SET 1</h3>
+    <table class="sara-table">
+        <tr>
+            <th>Sara</th>
+            <th>Pronounce</th>
+        </tr>
+        <tr><td class="thai-sara">-า</td><td>-aa</td></tr>
+        <tr><td class="thai-sara">-ี</td><td>-ee</td></tr>
+        <tr><td class="thai-sara">-ู</td><td>-uu</td></tr>
+        <tr><td class="thai-sara">โ-</td><td>-oh</td></tr>
+        <tr><td class="thai-sara">ไ-</td><td>-ai</td></tr>
+        <tr><td class="thai-sara">ใ-</td><td>-ai</td></tr>
+    </table>
+</div>
+
+<div id="game-container">
+    <h1>Consonant Match</h1>
+    <div id="progress">Score: <span id="score">0</span> / 26</div>
+    
+    <div id="hint-box">
+        <div class="meaning-text" id="meaning-display"></div>
+        <div class="hint-text" id="hint-display"></div>
+    </div>
+    
+    <div id="options">
+        <button class="option-btn" onclick="checkAnswer(0)">
+            <span class="thai-char" id="char-0"></span>
+            <span class="thai-name" id="name-0"></span>
+        </button>
+        <button class="option-btn" onclick="checkAnswer(1)">
+            <span class="thai-char" id="char-1"></span>
+            <span class="thai-name" id="name-1"></span>
+        </button>
+        <button class="option-btn" onclick="checkAnswer(2)">
+            <span class="thai-char" id="char-2"></span>
+            <span class="thai-name" id="name-2"></span>
+        </button>
+        <button class="option-btn" onclick="checkAnswer(3)">
+            <span class="thai-char" id="char-3"></span>
+            <span class="thai-name" id="name-3"></span>
+        </button>
+    </div>
+
+    <div id="feedback"></div>
+    <button id="next-btn" onclick="loadNextQuestion()">Next Question</button>
+</div>
+
+<script>
+    // 26 unique consonants loaded from your provided CSV data
+    const allConsonants = [
+        { char: 'ก', name: 'Gor Gài', meaning: 'Chicken', hint: 'looks like a chicken beak.' },
+        { char: 'ข', name: 'Kŏr Kài', meaning: 'Egg', hint: 'represents an egg. But instead it looks like a Condom! (Con sounds like Kŏr, doesn\'t it?)' },
+        { char: 'ค', name: 'Kor Kwaay', meaning: 'Buffalo', hint: 'looks like a buffalo butt. The buffalo loves being outside.' },
+        { char: 'ง', name: 'Ngor Nguu', meaning: 'Snake', hint: 'looks like a snake raising his neck.' },
+        { char: 'จ', name: 'Jor Jaan', meaning: 'Dish', hint: 'looks like a hand of a waitress holding a plate' },
+        { char: 'ช', name: 'Chor Cháang', meaning: 'Elephant', hint: 'Think of a magical elephant hatching from an egg.' },
+        { char: 'ซ', name: 'Sor Sôh', meaning: 'Chain', hint: 'A magical elephant was captured and chained.' },
+        { char: 'ด', name: 'Dor Dèk', meaning: 'Kid', hint: 'Unlike a buffalo who loves being outdoors in the sun, a kit loves being in the house (look at his head tugging inside!).' },
+        { char: 'ต', name: 'DTor DTào', meaning: 'Turtle', hint: 'Like a kid, a turtle with a bumpy top loves hiding his head inside his shell.' },
+        { char: 'อ', name: 'or aàng', meaning: 'Sink', hint: 'The shape of this consonant looks like a sing with a faucet on top.' },
+        { char: 'บ', name: 'Bor Bai-Mái', meaning: 'Leaf', hint: 'The leaf has a wider base than an egg.' },
+        { char: 'ม', name: 'Mor Máa', meaning: 'Horse', hint: 'This consonant looks like a leaf, think of a race between a horse and a mouse. A horse is faster so let\'s draw a leg in front.' },
+        { char: 'น', name: 'Nor Nŭu', meaning: 'Mouse', hint: 'This consonant looks like a leaf, think of a race between a horse and a mouse. A mouse is slower so let\'s draw a tail at the rear.' },
+        { char: 'ป', name: 'BPor BPlaa', meaning: 'Fish', hint: 'Draw a rear long fin at the end of the leaf turning it into a fish.' },
+        { char: 'พ', name: 'Por Paan', meaning: 'Offering Tray', hint: 'Fold the base of the leaf to turn it into an offering tray.' },
+        { char: 'ย', name: 'Yor Yák', meaning: 'Giant', hint: 'A leaf can also turn into the face of a giant, move the head inside to make it look like a giant\'s big eye then draw a smile.' },
+        { char: 'ท', name: 'Tor Tá-Hăan', meaning: 'Soldier', hint: 'The soldier consonant looks like a soldier crawling.' },
+        { char: 'ห', name: 'Hŏr Hèeb', meaning: 'Chest', hint: 'The chest consonant looks like a soldier carrying a chest on his back.' },
+        { char: 'ว', name: 'Wor Wăen', meaning: 'Ring', hint: 'The shape of this consonant looks like a ring on a finger.' },
+        { char: 'ร', name: 'Ror Ruuea', meaning: 'Boat', hint: 'Let\'s draw a small sail above the ring turning this into a boat.' },
+        { char: 'ล', name: 'Lor Ling', meaning: 'Monkey', hint: 'The monkey consonant looks like a monkey swinging on a vine in a tree.' },
+        { char: 'ส', name: 'Sŏr Sŭuea', meaning: 'Tiger', hint: 'Think of a monkey being chased by a tiger. The tiger swipes its claws down on the monkey\'s head. Turning the monkey consonant into a tiger consonant.' },
+        { char: 'ถ', name: 'Tŏr Tŭng', meaning: 'Bag', hint: 'Think of the chicken consonant, then imagine fried chicken in a bag tied with a rubber band at the bottom (head insdie). Turning the chicken consonant into the bag consonant.' },
+        { char: 'ฟ', name: 'For Fan', meaning: 'Tooth', hint: 'Think back to childhood — some parents would tie a string to a baby tooth and yank it out.' },
+        { char: 'ผ', name: 'Pŏr Pûeng', meaning: 'Bee', hint: 'Shaped like a tray but head inside, sound also like a tray but with a valley tone.' },
+        { char: 'ฝ', name: 'Fŏr Făa', meaning: 'Lid', hint: 'Shaped like a tooth but head inside, sound also like a tooth but with a valley tone.' }
+    ];
+
+    let score = 0;
+    let currentPool = [];
+    let wrongPool = [];
+    let currentQuestion = null;
+    let currentOptions = [];
+    let correctIndex = -1;
+
+    function shuffleArray(array) {
+        let shuffled = [...array];
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+        }
+        return shuffled;
+    }
+
+    function initGame() {
+        score = 0;
+        currentPool = shuffleArray(allConsonants);
+        wrongPool = [];
+        document.getElementById('score').innerText = score;
+        loadNextQuestion();
+    }
+
+    function loadNextQuestion() {
+        // Reset UI
+        document.getElementById('feedback').innerText = '';
+        document.getElementById('next-btn').style.display = 'none';
+        const buttons = document.querySelectorAll('.option-btn');
+        buttons.forEach(btn => {
+            btn.classList.remove('correct', 'wrong');
+            btn.disabled = false;
+        });
+
+        // Check if pool is empty
+        if (currentPool.length === 0) {
+            if (wrongPool.length === 0) {
+                document.getElementById('game-container').innerHTML = `
+                    <h1>Game Complete!</h1>
+                    <h2 style="color: #27ae60;">Final Score: 26 / 26</h2>
+                    <p>All consonants mastered.</p>
+                    <button id="next-btn" style="display:inline-block;" onclick="location.reload()">Play Again</button>
+                `;
+                return;
+            } else {
+                // Loop the wrong answers
+                currentPool = shuffleArray(wrongPool);
+                wrongPool = [];
+            }
+        }
+
+        currentQuestion = currentPool.pop();
+        
+        // Pick 3 random distractors from the FULL list
+        let distractors = allConsonants.filter(c => c.char !== currentQuestion.char);
+        distractors = shuffleArray(distractors).slice(0, 3);
+        
+        // Combine and shuffle options
+        currentOptions = shuffleArray([currentQuestion, ...distractors]);
+        correctIndex = currentOptions.findIndex(c => c.char === currentQuestion.char);
+
+        // Update UI Text
+        document.getElementById('meaning-display').innerText = `Find: "${currentQuestion.meaning}"`;
+        document.getElementById('hint-display').innerText = `Hint: ${currentQuestion.hint}`;
+        
+        currentOptions.forEach((opt, index) => {
+            document.getElementById(`char-${index}`).innerText = opt.char;
+            document.getElementById(`name-${index}`).innerText = opt.name;
+        });
+    }
+
+    function checkAnswer(selectedIndex) {
+        const buttons = document.querySelectorAll('.option-btn');
+        const feedback = document.getElementById('feedback');
+        
+        buttons.forEach(btn => btn.disabled = true);
+
+        if (selectedIndex === correctIndex) {
+            score++;
+            document.getElementById('score').innerText = score;
+            buttons[selectedIndex].classList.add('correct');
+            feedback.innerText = "Correct! Great job."; 
+            feedback.style.color = "#27ae60";
+        } else {
+            wrongPool.push(currentQuestion); // Send to wrong pool to be repeated later
+            buttons[selectedIndex].classList.add('wrong');
+            buttons[correctIndex].classList.add('correct');
+            
+            const correctAnswer = currentOptions[correctIndex];
+            feedback.innerText = `Incorrect. The correct answer is ${correctAnswer.char} (${correctAnswer.name}).`;
+            feedback.style.color = "#c0392b";
+        }
+
+        document.getElementById('next-btn').style.display = 'inline-block';
+    }
+
+    // Start game
+    initGame();
+</script>
+
+</body>
+</html>
