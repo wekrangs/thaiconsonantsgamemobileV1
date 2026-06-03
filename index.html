@@ -70,6 +70,7 @@
             gap: 15px;
         }
         button.option-btn {
+            position: relative; 
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -87,12 +88,56 @@
             border-color: #3498db;
             transform: scale(1.02);
         }
+
+        /* --- Consonant Class Badges & Borders --- */
+        .class-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 3px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            opacity: 0; 
+            transition: opacity 0.2s;
+        }
+
+        button.option-btn.class-high {
+            border-bottom: 5px solid #9b59b6; 
+        }
+        button.option-btn.class-high .class-badge {
+            opacity: 1;
+            background-color: #9b59b6;
+            color: white;
+        }
+
+        button.option-btn.class-mid {
+            border-bottom: 5px solid #f1c40f; 
+        }
+        button.option-btn.class-mid .class-badge {
+            opacity: 1;
+            background-color: #f1c40f;
+            color: #333;
+        }
+
+        button.option-btn.class-low {
+            border-bottom: 5px solid #3498db; 
+        }
+        button.option-btn.class-low .class-badge {
+            opacity: 1;
+            background-color: #3498db;
+            color: white;
+        }
+
         .thai-char {
             font-size: 4rem;
             font-family: 'Sarabun', sans-serif;
             color: #2c3e50;
-            line-height: normal; /* Fixes clipping on mobile */
+            line-height: normal; 
             padding: 5px 0;
+            margin-top: 10px; 
         }
         .thai-name {
             font-size: 1.1rem;
@@ -100,22 +145,35 @@
             margin-top: 0.5rem;
             font-weight: bold;
         }
+        
         button.option-btn.correct {
             background-color: #2ecc71;
             border-color: #27ae60;
+            border-bottom-color: #27ae60; 
         }
         button.option-btn.correct .thai-char, 
         button.option-btn.correct .thai-name {
             color: white;
         }
+        button.option-btn.correct .class-badge {
+            background-color: #27ae60; 
+            color: white;
+        }
+
         button.option-btn.wrong {
             background-color: #e74c3c;
             border-color: #c0392b;
+            border-bottom-color: #c0392b; 
         }
         button.option-btn.wrong .thai-char, 
         button.option-btn.wrong .thai-name {
             color: white;
         }
+        button.option-btn.wrong .class-badge {
+            background-color: #c0392b; 
+            color: white;
+        }
+        
         #feedback {
             margin-top: 1.5rem;
             font-size: 1.2rem;
@@ -150,6 +208,8 @@
             border: 2px solid #3498db;
             box-sizing: border-box;
             max-width: 320px;
+            max-height: 90vh; /* Prevent widget from going off screen */
+            overflow-y: auto; /* Adds scrollbar if content is too tall */
         }
         .sara-table-widget h3 {
             margin: 0 0 15px 0;
@@ -166,7 +226,7 @@
         }
         .sara-table th, .sara-table td {
             border: 1px solid #ecf0f1;
-            padding: 12px 15px; 
+            padding: 10px 15px; 
             text-align: center;
         }
         .sara-table th {
@@ -175,12 +235,20 @@
             font-weight: bold;
             font-size: 1.1rem;
         }
+        .set-header td {
+            background-color: #e8f4fd;
+            color: #3498db;
+            font-weight: bold;
+            font-size: 0.95rem;
+            padding: 5px !important;
+            text-transform: uppercase;
+        }
         .sara-table .thai-sara {
             font-family: 'Sarabun', sans-serif;
             font-weight: bold;
             font-size: 2.2rem; 
             color: #e67e22;
-            line-height: normal; /* Android fix */
+            line-height: normal; 
         }
         
         /* Remark Box Style */
@@ -211,18 +279,20 @@
                 justify-content: flex-start;
             }
             #game-container {
-                order: 1; /* Forces the game to render on top */
+                order: 1; 
             }
             .sara-table-widget {
                 position: relative;
                 top: 0;
                 right: 0;
-                order: 2; /* Forces the table to render below the game */
-                margin-top: 25px; /* Adds space between the game and the table */
+                order: 2; 
+                margin-top: 25px; 
                 margin-bottom: 20px;
                 transform: none;
                 width: 100%;
                 max-width: 400px;
+                max-height: none; /* Let it flow naturally on mobile */
+                overflow-y: visible;
             }
         }
 
@@ -260,9 +330,16 @@
             }
             .thai-char {
                 font-size: 3rem; 
+                margin-top: 15px; 
             }
             .thai-name {
                 font-size: 0.95rem;
+            }
+            .class-badge {
+                font-size: 0.65rem;
+                padding: 2px 5px;
+                top: 6px;
+                right: 6px;
             }
             #feedback {
                 font-size: 1.1rem;
@@ -295,18 +372,26 @@
 <body>
 
 <div class="sara-table-widget">
-    <h3>Sara SET 1</h3>
+    <h3>Sara SET 1 & 2</h3>
     <table class="sara-table">
         <tr>
             <th>Sara</th>
             <th>Pronounce</th>
         </tr>
+        <!-- SET 1 Divider -->
+        <tr class="set-header"><td colspan="2">SET 1</td></tr>
         <tr><td class="thai-sara">อา</td><td>-aa</td></tr>
         <tr><td class="thai-sara">อี</td><td>-ee</td></tr>
         <tr><td class="thai-sara">อู</td><td>-uu</td></tr>
         <tr><td class="thai-sara">โอ</td><td>-oh</td></tr>
         <tr><td class="thai-sara">ไอ</td><td>-ai</td></tr>
         <tr><td class="thai-sara">ใอ</td><td>-ai</td></tr>
+        
+        <!-- SET 2 Divider -->
+        <tr class="set-header"><td colspan="2">SET 2</td></tr>
+        <tr><td class="thai-sara">อะ</td><td>-a</td></tr>
+        <tr><td class="thai-sara">เอา</td><td>-ao</td></tr>
+        <tr><td class="thai-sara">ออ</td><td>-or</td></tr>
     </table>
     <div class="sara-remark">
         💡 <strong>Note:</strong> อ is where a consonant is placed, when you change a consonant then the sound will also change.
@@ -323,19 +408,23 @@
     </div>
     
     <div id="options">
-        <button class="option-btn" onclick="checkAnswer(0)">
+        <button class="option-btn" id="btn-0" onclick="checkAnswer(0)">
+            <span class="class-badge" id="badge-0"></span>
             <span class="thai-char" id="char-0"></span>
             <span class="thai-name" id="name-0"></span>
         </button>
-        <button class="option-btn" onclick="checkAnswer(1)">
+        <button class="option-btn" id="btn-1" onclick="checkAnswer(1)">
+            <span class="class-badge" id="badge-1"></span>
             <span class="thai-char" id="char-1"></span>
             <span class="thai-name" id="name-1"></span>
         </button>
-        <button class="option-btn" onclick="checkAnswer(2)">
+        <button class="option-btn" id="btn-2" onclick="checkAnswer(2)">
+            <span class="class-badge" id="badge-2"></span>
             <span class="thai-char" id="char-2"></span>
             <span class="thai-name" id="name-2"></span>
         </button>
-        <button class="option-btn" onclick="checkAnswer(3)">
+        <button class="option-btn" id="btn-3" onclick="checkAnswer(3)">
+            <span class="class-badge" id="badge-3"></span>
             <span class="thai-char" id="char-3"></span>
             <span class="thai-name" id="name-3"></span>
         </button>
@@ -346,34 +435,33 @@
 </div>
 
 <script>
-    // 26 unique consonants loaded from your provided CSV data
     const allConsonants = [
-        { char: 'ก', name: 'Gor Gài', meaning: 'Chicken', hint: 'looks like a chicken beak.' },
-        { char: 'ข', name: 'Kŏr Kài', meaning: 'Egg', hint: 'represents an egg. But instead it looks like a Condom! (Con sounds like Kŏr, doesn\'t it?)' },
-        { char: 'ค', name: 'Kor Kwaay', meaning: 'Buffalo', hint: 'looks like a buffalo butt. The buffalo loves being outside.' },
-        { char: 'ง', name: 'Ngor Nguu', meaning: 'Snake', hint: 'looks like a snake raising his neck.' },
-        { char: 'จ', name: 'Jor Jaan', meaning: 'Dish', hint: 'looks like a hand of a waitress holding a plate' },
-        { char: 'ช', name: 'Chor Cháang', meaning: 'Elephant', hint: 'Think of a magical elephant hatching from an egg.' },
-        { char: 'ซ', name: 'Sor Sôh', meaning: 'Chain', hint: 'A magical elephant was captured and chained.' },
-        { char: 'ด', name: 'Dor Dèk', meaning: 'Kid', hint: 'Unlike a buffalo who loves being outdoors in the sun, a kit loves being in the house (look at his head tugging inside!).' },
-        { char: 'ต', name: 'DTor DTào', meaning: 'Turtle', hint: 'Like a kid, a turtle with a bumpy top loves hiding his head inside his shell.' },
-        { char: 'อ', name: 'or aàng', meaning: 'Sink', hint: 'The shape of this consonant looks like a sing with a faucet on top.' },
-        { char: 'บ', name: 'Bor Bai-Mái', meaning: 'Leaf', hint: 'The leaf has a wider base than an egg.' },
-        { char: 'ม', name: 'Mor Máa', meaning: 'Horse', hint: 'This consonant looks like a leaf, think of a race between a horse and a mouse. A horse is faster so let\'s draw a leg in front.' },
-        { char: 'น', name: 'Nor Nŭu', meaning: 'Mouse', hint: 'This consonant looks like a leaf, think of a race between a horse and a mouse. A mouse is slower so let\'s draw a tail at the rear.' },
-        { char: 'ป', name: 'BPor BPlaa', meaning: 'Fish', hint: 'Draw a rear long fin at the end of the leaf turning it into a fish.' },
-        { char: 'พ', name: 'Por Paan', meaning: 'Offering Tray', hint: 'Fold the base of the leaf to turn it into an offering tray.' },
-        { char: 'ย', name: 'Yor Yák', meaning: 'Giant', hint: 'A leaf can also turn into the face of a giant, move the head inside to make it look like a giant\'s big eye then draw a smile.' },
-        { char: 'ท', name: 'Tor Tá-Hăan', meaning: 'Soldier', hint: 'The soldier consonant looks like a soldier crawling.' },
-        { char: 'ห', name: 'Hŏr Hèeb', meaning: 'Chest', hint: 'The chest consonant looks like a soldier carrying a chest on his back.' },
-        { char: 'ว', name: 'Wor Wăen', meaning: 'Ring', hint: 'The shape of this consonant looks like a ring on a finger.' },
-        { char: 'ร', name: 'Ror Ruuea', meaning: 'Boat', hint: 'Let\'s draw a small sail above the ring turning this into a boat.' },
-        { char: 'ล', name: 'Lor Ling', meaning: 'Monkey', hint: 'The monkey consonant looks like a monkey swinging on a vine in a tree.' },
-        { char: 'ส', name: 'Sŏr Sŭuea', meaning: 'Tiger', hint: 'Think of a monkey being chased by a tiger. The tiger swipes its claws down on the monkey\'s head. Turning the monkey consonant into a tiger consonant.' },
-        { char: 'ถ', name: 'Tŏr Tŭng', meaning: 'Bag', hint: 'Think of the chicken consonant, then imagine fried chicken in a bag tied with a rubber band at the bottom (head insdie). Turning the chicken consonant into the bag consonant.' },
-        { char: 'ฟ', name: 'For Fan', meaning: 'Tooth', hint: 'Think back to childhood — some parents would tie a string to a baby tooth and yank it out.' },
-        { char: 'ผ', name: 'Pŏr Pûeng', meaning: 'Bee', hint: 'Shaped like a tray but head inside, sound also like a tray but with a valley tone.' },
-        { char: 'ฝ', name: 'Fŏr Făa', meaning: 'Lid', hint: 'Shaped like a tooth but head inside, sound also like a tooth but with a valley tone.' }
+        { char: 'ก', class: 'mid', name: 'Gor Gài', meaning: 'Chicken', hint: `Looks like a chicken's beak.` },
+        { char: 'ข', class: 'high', name: 'Kŏr Kài', meaning: 'Egg', hint: `Represents an egg, but instead, it looks like a condom! ('Con' sounds like 'Kŏr', doesn’t it?)` },
+        { char: 'ค', class: 'low', name: 'Kor Kwaay', meaning: 'Buffalo', hint: `Looks like a buffalo's butt. The buffalo loves being outside.` },
+        { char: 'ง', class: 'low', name: 'Ngor Nguu', meaning: 'Snake', hint: `Looks like a snake raising its neck.` },
+        { char: 'จ', class: 'mid', name: 'Jor Jaan', meaning: 'Dish', hint: `Looks like the hand of a waitress holding a plate.` },
+        { char: 'ช', class: 'low', name: 'Chor Cháang', meaning: 'Elephant', hint: `Think of a magical elephant hatching from an egg.` },
+        { char: 'ซ', class: 'low', name: 'Sor Sôh', meaning: 'Chain', hint: `A magical elephant was captured and chained.` },
+        { char: 'ด', class: 'mid', name: 'Dor Dèk', meaning: 'Kid', hint: `Unlike a buffalo that loves being outdoors in the sun, a kid loves being in the house (look at his head tucked inside!).` },
+        { char: 'ต', class: 'mid', name: 'DTor DTào', meaning: 'Turtle', hint: `Like a kid, a turtle with a bumpy top loves hiding its head inside its shell.` },
+        { char: 'อ', class: 'mid', name: 'or aàng', meaning: 'Sink', hint: `The shape of this consonant looks like a sink with a faucet on top.` },
+        { char: 'บ', class: 'mid', name: 'Bor Bai-Mái', meaning: 'Leaf', hint: `The leaf has a wider base than an egg.` },
+        { char: 'ม', class: 'low', name: 'Mor Máa', meaning: 'Horse', hint: `This consonant looks like a leaf. Think of a race between a horse and a mouse; a horse is faster, so let’s draw a leg in front.` },
+        { char: 'น', class: 'low', name: 'Nor Nŭu', meaning: 'Mouse', hint: `This consonant looks like a leaf. Think of a race between a horse and a mouse; a mouse is slower, so let’s draw a tail at the rear.` },
+        { char: 'ป', class: 'mid', name: 'BPor BPlaa', meaning: 'Fish', hint: `Draw a long rear fin at the end of the leaf, turning it into a fish.` },
+        { char: 'พ', class: 'low', name: 'Por Paan', meaning: 'Offering Tray', hint: `Fold the base of the leaf to turn it into an offering tray.` },
+        { char: 'ย', class: 'low', name: 'Yor Yák', meaning: 'Giant', hint: `A leaf can also turn into the face of a giant. Move the head inside to make it look like a giant’s big eye, then draw a smile.` },
+        { char: 'ท', class: 'low', name: 'Tor Tá-Hăan', meaning: 'Soldier', hint: `The soldier consonant looks like a soldier crawling.` },
+        { char: 'ห', class: 'high', name: 'Hŏr Hèeb', meaning: 'Chest', hint: `The chest consonant looks like a soldier carrying a chest on his back.` },
+        { char: 'ว', class: 'low', name: 'Wor Wăen', meaning: 'Ring', hint: `The shape of this consonant looks like a ring on a finger.` },
+        { char: 'ร', class: 'low', name: 'Ror Ruuea', meaning: 'Boat', hint: `Let’s draw a small sail above the ring, turning this into a boat.` },
+        { char: 'ล', class: 'low', name: 'Lor Ling', meaning: 'Monkey', hint: `The monkey consonant looks like a monkey swinging on a vine in a tree.` },
+        { char: 'ส', class: 'high', name: 'Sŏr Sŭuea', meaning: 'Tiger', hint: `Think of a monkey being chased by a tiger. The tiger swipes its claws down on the monkey's head, turning the monkey consonant into a tiger consonant.` },
+        { char: 'ถ', class: 'high', name: 'Tŏr Tŭng', meaning: 'Bag', hint: `Think of the chicken consonant, then imagine fried chicken in a bag tied with a rubber band at the bottom (head inside), turning the chicken consonant into the bag consonant.` },
+        { char: 'ฟ', class: 'low', name: 'For Fan', meaning: 'Tooth', hint: `Think back to childhood — some parents would tie a string to a baby tooth and yank it out.` },
+        { char: 'ผ', class: 'high', name: 'Pŏr Pûeng', meaning: 'Bee', hint: `Shaped like a tray but with the head inside; it also sounds like a tray but with a valley tone.` },
+        { char: 'ฝ', class: 'high', name: 'Fŏr Făa', meaning: 'Lid', hint: `Shaped like a tooth but with the head inside; it also sounds like a tooth but with a valley tone.` }
     ];
 
     let score = 0;
@@ -401,16 +489,14 @@
     }
 
     function loadNextQuestion() {
-        // Reset UI
         document.getElementById('feedback').innerText = '';
         document.getElementById('next-btn').style.display = 'none';
         const buttons = document.querySelectorAll('.option-btn');
         buttons.forEach(btn => {
-            btn.classList.remove('correct', 'wrong');
+            btn.classList.remove('correct', 'wrong', 'class-high', 'class-mid', 'class-low');
             btn.disabled = false;
         });
 
-        // Check if pool is empty
         if (currentPool.length === 0) {
             if (wrongPool.length === 0) {
                 document.getElementById('game-container').innerHTML = `
@@ -421,7 +507,6 @@
                 `;
                 return;
             } else {
-                // Loop the wrong answers
                 currentPool = shuffleArray(wrongPool);
                 wrongPool = [];
             }
@@ -429,19 +514,20 @@
 
         currentQuestion = currentPool.pop();
         
-        // Pick 3 random distractors from the FULL list
         let distractors = allConsonants.filter(c => c.char !== currentQuestion.char);
         distractors = shuffleArray(distractors).slice(0, 3);
         
-        // Combine and shuffle options
         currentOptions = shuffleArray([currentQuestion, ...distractors]);
         correctIndex = currentOptions.findIndex(c => c.char === currentQuestion.char);
 
-        // Update UI Text
         document.getElementById('meaning-display').innerText = `Find: "${currentQuestion.meaning}"`;
         document.getElementById('hint-display').innerText = `Hint: ${currentQuestion.hint}`;
         
         currentOptions.forEach((opt, index) => {
+            const btn = document.getElementById(`btn-${index}`);
+            btn.classList.add(`class-${opt.class}`);
+            
+            document.getElementById(`badge-${index}`).innerText = opt.class; 
             document.getElementById(`char-${index}`).innerText = opt.char;
             document.getElementById(`name-${index}`).innerText = opt.name;
         });
@@ -460,7 +546,7 @@
             feedback.innerText = "Correct! Great job."; 
             feedback.style.color = "#27ae60";
         } else {
-            wrongPool.push(currentQuestion); // Send to wrong pool to be repeated later
+            wrongPool.push(currentQuestion); 
             buttons[selectedIndex].classList.add('wrong');
             buttons[correctIndex].classList.add('correct');
             
@@ -472,7 +558,6 @@
         document.getElementById('next-btn').style.display = 'inline-block';
     }
 
-    // Start game
     initGame();
 </script>
 
